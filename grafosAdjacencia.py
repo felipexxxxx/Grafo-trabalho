@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class Grafo:
     def __init__(self, estados):
         self.estados = estados
@@ -9,30 +11,12 @@ class Grafo:
         self.matriz_adjacencia = [[0] * self.num_vertices for _ in range(self.num_vertices)]
         self._construir_matriz_adjacencia()
 
-        # Criar matriz de incidência
-        self.matriz_incidencia = [[0] * self.num_arestas for _ in range(self.num_vertices)]
-        self._construir_matriz_incidencia()
-
     def _construir_matriz_adjacencia(self):
         """Constrói a matriz de adjacência"""
         for i, estado in enumerate(self.nomes):
             for vizinho in self.estados[estado]:
                 j = self.nomes.index(vizinho)
                 self.matriz_adjacencia[i][j] = 1  # Conexão entre os estados
-
-    def _construir_matriz_incidencia(self):
-        """Constrói a matriz de incidência"""
-        aresta_index = 0
-        arestas_adicionadas = set()  # Evitar duplicação de arestas
-
-        for i, estado in enumerate(self.nomes):
-            for vizinho in self.estados[estado]:
-                if (estado, vizinho) not in arestas_adicionadas and (vizinho, estado) not in arestas_adicionadas:
-                    j = self.nomes.index(vizinho)
-                    self.matriz_incidencia[i][aresta_index] = 1
-                    self.matriz_incidencia[j][aresta_index] = 1
-                    arestas_adicionadas.add((estado, vizinho))
-                    aresta_index += 1
 
     def exibir_matriz_adjacencia(self):
         """Exibe a matriz de adjacência formatada e alinhada corretamente"""
@@ -47,19 +31,6 @@ class Grafo:
         for i, linha in enumerate(self.matriz_adjacencia):
             linha_formatada = " ".join(f"{valor:>{espaco}}" for valor in linha)
             print(f"{self.nomes[i]:<3} {linha_formatada}")  # Nome do estado + linha da matriz
-
-    def exibir_matriz_incidencia(self):
-        """Exibe a matriz de incidência formatada e alinhada corretamente"""
-        espaco = 1  # Define um espaçamento adequado para alinhamento
-        print("\nMatriz de Incidência:\n")
-
-        cabecalho = " " + " ".join(f"E{i:>{espaco-1}}" for i in range(self.num_arestas))
-        print(cabecalho)
-
-        for i, linha in enumerate(self.matriz_incidencia):
-            linha_formatada = " ".join(f"{valor:>{espaco}}" for valor in linha)
-            print(f"{self.nomes[i]:<3} {linha_formatada}")
-
 
 estados = {
     "AC": ["AM", "RO"],
@@ -91,9 +62,9 @@ estados = {
     "DF": ["GO", "MG"],
 }
 
-# Criando o grafo
+
 grafo = Grafo(estados)
 
-# Exibir Matrizes
+
 grafo.exibir_matriz_adjacencia()
-grafo.exibir_matriz_incidencia()
+
