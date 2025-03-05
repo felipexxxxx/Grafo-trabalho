@@ -32,6 +32,63 @@ class Grafo:
             linha_formatada = " ".join(f"{valor:>{espaco}}" for valor in linha)
             print(f"{self.nomes[i]:<3} {linha_formatada}")  # Nome do estado + linha da matriz
 
+    def calcular_graus(self):
+        """Calcula o grau de cada estado"""
+        return {estado: sum(self.matriz_adjacencia[i]) for i, estado in enumerate(self.nomes)}
+
+    def identificar_grau_max_min(self):
+        """Identifica os estados com maior e menor quantidade de vizinhos"""
+        graus = self.calcular_graus()
+        grau_maximo = max(graus.values())
+        grau_minimo = min(graus.values())
+
+        estados_max_grau = [estado for estado, grau in graus.items() if grau == grau_maximo]
+        estados_min_grau = [estado for estado, grau in graus.items() if grau == grau_minimo]
+
+        return estados_max_grau, estados_min_grau, grau_maximo, grau_minimo
+
+    def listar_vizinhos(self, estado):
+        """Lista os vizinhos de um estado"""
+        index = self.nomes.index(estado)
+        return [self.nomes[i] for i, valor in enumerate(self.matriz_adjacencia[index]) if valor == 1]
+
+    def calcular_frequencia_graus(self):
+        """Calcula a frequência dos graus dos vértices"""
+        graus = self.calcular_graus()
+        frequencia_graus = {}
+        for grau in graus.values():
+            if grau in frequencia_graus:
+                frequencia_graus[grau] += 1
+            else:
+                frequencia_graus[grau] = 1
+        return frequencia_graus
+
+    def exibir_grafico_frequencia_graus(self):
+        """Exibe o gráfico da frequência dos graus dos vértices"""
+        frequencia_graus = self.calcular_frequencia_graus()
+
+        plt.figure(figsize=(10, 6))
+        plt.bar(frequencia_graus.keys(), frequencia_graus.values(), color='royalblue')
+
+        # Configuração do gráfico
+        plt.xlabel("Grau (Número de vizinhos)", fontsize=12)
+        plt.ylabel("Número de estados", fontsize=12)
+        plt.title("Frequência dos Graus dos Estados", fontsize=14)
+
+        # Garante que os graus apareçam ordenados no eixo X
+        plt.xticks(sorted(frequencia_graus.keys()))
+
+        plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+        # Exibir valores no topo das barras
+        for grau, frequencia in frequencia_graus.items():
+            plt.text(grau, frequencia + 0.1, str(frequencia), ha='center', fontsize=11)
+
+        # Mostrar o gráfico
+        plt.show()
+
+
+# Definição dos estados e suas conexões (grafo)
 estados = {
     "AC": ["AM", "RO"],
     "AL": ["BA", "PE", "SE"],
@@ -62,9 +119,26 @@ estados = {
     "DF": ["GO", "MG"],
 }
 
-
+# Criando o grafo
 grafo = Grafo(estados)
 
-
+# Exibir Matriz de Adjacência
 grafo.exibir_matriz_adjacencia()
 
+# Identificar estados com maior e menor grau
+estados_max_grau, estados_min_grau, grau_maximo, grau_minimo = grafo.identificar_grau_max_min()
+
+# Exibir estados com maior número de vizinhos
+print("\nEstado(s) com maior número de vizinhos:")
+for estado in estados_max_grau:
+    vizinhos = ", ".join(grafo.listar_vizinhos(estado))
+    print(f"-> {estado}: {grau_maximo} vizinhos ({vizinhos})")
+
+# Exibir estados com menor número de vizinhos
+print("\nEstado(s) com menor número de vizinhos:")
+for estado in estados_min_grau:
+    vizinhos = ", ".join(grafo.listar_vizinhos(estado))
+    print(f"-> {estado}: {grau_minimo} vizinhos ({vizinhos})")
+
+# Exibir gráfico da frequência dos graus
+grafo.exibir_grafico_frequencia_graus()

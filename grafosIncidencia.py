@@ -76,30 +76,43 @@ grafo = Grafo(estados)
 
 grafo.exibir_matriz_incidencia()
 
-frequencia_graus = {}
-for grau in graus.values():
-    if grau in frequencia_graus:
-        frequencia_graus[grau] += 1
-    else:
-        frequencia_graus[grau] = 1
+# Função para calcular e exibir o histograma dos graus (número de conexões de cada estado)
+def exibir_grafico_frequencia_graus(matriz_incidencia, nomes_estados):
+    """Calcula e exibe o gráfico da frequência dos graus dos vértices."""
 
-# Exibir a frequência dos graus dos vértices
-plt.figure(figsize=(10, 6))
-plt.bar(frequencia_graus.keys(), frequencia_graus.values(), color='royalblue')
+    # Cálculo do grau de cada estado (soma dos valores na matriz de incidência)
+    graus = {estado: sum(matriz_incidencia[i]) for i, estado in enumerate(nomes_estados)}
 
-# Configuração do gráfico
-plt.xlabel("Grau (Número de vizinhos)", fontsize=12)
-plt.ylabel("Número de estados", fontsize=12)
-plt.title("Frequência dos Graus dos Estados", fontsize=14)
+    # Cálculo da frequência dos graus dos vértices
+    frequencia_graus = {}
+    for grau in graus.values():
+        if grau in frequencia_graus:
+            frequencia_graus[grau] += 1
+        else:
+            frequencia_graus[grau] = 1
 
-# Garante que os graus apareçam ordenados no eixo X
-plt.xticks(sorted(frequencia_graus.keys()))
+    # Criando o gráfico de barras
+    plt.figure(figsize=(10, 6))
+    plt.bar(frequencia_graus.keys(), frequencia_graus.values(), color='purple', alpha=0.75, edgecolor='black')
 
-plt.grid(axis="y", linestyle="--", alpha=0.7)
+    # Configuração do gráfico
+    plt.xlabel("Grau (Número de vizinhos)", fontsize=12)
+    plt.ylabel("Número de estados", fontsize=12)
+    plt.title("Frequência dos Graus dos Estados - Matriz de Incidência", fontsize=14)
 
-# Exibir valores no topo das barras
-for grau, frequencia in frequencia_graus.items():
-    plt.text(grau, frequencia + 0.1, str(frequencia), ha='center', fontsize=11)
+    # Garante que os graus apareçam ordenados no eixo X
+    plt.xticks(sorted(frequencia_graus.keys()))
 
-# Mostrar o gráfico
-plt.show()
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+    # Exibir valores no topo das barras
+    for grau, frequencia in frequencia_graus.items():
+        plt.text(grau, frequencia + 0.1, str(frequencia), ha='center', fontsize=11, color='black')
+
+    # Mostrar o gráfico
+    plt.show()
+
+
+# Exibir gráfico da frequência dos graus da matriz de incidência
+exibir_grafico_frequencia_graus(grafo.matriz_incidencia, grafo.nomes)
+
