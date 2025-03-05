@@ -53,16 +53,14 @@ class Grafo:
         espaco = 1  # Define um espaçamento adequado para alinhamento
         print("\nMatriz de Incidência:\n")
 
-        # Cabeçalho da matriz de incidência
         cabecalho = " " + " ".join(f"E{i:>{espaco-1}}" for i in range(self.num_arestas))
         print(cabecalho)
 
-        # Exibição das linhas da matriz
         for i, linha in enumerate(self.matriz_incidencia):
             linha_formatada = " ".join(f"{valor:>{espaco}}" for valor in linha)
             print(f"{self.nomes[i]:<3} {linha_formatada}")
 
-# Definição dos estados e suas conexões (grafo)
+
 estados = {
     "AC": ["AM", "RO"],
     "AL": ["BA", "PE", "SE"],
